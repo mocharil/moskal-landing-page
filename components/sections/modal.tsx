@@ -1,6 +1,5 @@
 "use client"
 
-import nodemailer from 'nodemailer';
 
 import type React from "react"
 
@@ -29,34 +28,35 @@ export function Modal({ isOpen, onClose }: ModalProps) {
     setIsSubmitting(true);
 
     try {
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: process.env.EMAIL_SENDER,
-          pass: process.env.EMAIL_PASSWORD,
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          company: company,
+        }),
       });
 
-      const mailOptions = {
-        from: process.env.EMAIL_SENDER,
-        to: 'info@moskal.id',
-        subject: `Get Started by ${email}`,
-        text: `Full Name: ${name}\nEmail: ${email}\nCompany: ${company}`,
-      };
+      if (response.ok) {
+        setIsSubmitting(false);
+        setIsSubmitted(true);
 
-      await transporter.sendMail(mailOptions);
-
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-
-      // Reset form after 2 seconds
-      setTimeout(() => {
-        setEmail("");
-        setName("");
-        setCompany("");
-        setIsSubmitted(false);
-        onClose();
-      }, 2000);
+        // Reset form after 2 seconds
+        setTimeout(() => {
+          setEmail("");
+          setName("");
+          setCompany("");
+          setIsSubmitted(false);
+          onClose();
+        }, 2000);
+      } else {
+        console.error("Failed to send email:", response.status);
+        setIsSubmitting(false);
+        alert("Failed to submit. Please try again.");
+      }
     } catch (error) {
       console.error("Error sending email:", error);
       setIsSubmitting(false);
