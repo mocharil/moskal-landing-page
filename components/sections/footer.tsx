@@ -130,9 +130,7 @@ export function Footer() {
             <Link href="/terms" className="text-gray-500 hover:text-blue-600 text-sm transition-colors">
               Terms of Service
             </Link>
-            <a href="#" className="text-gray-500 hover:text-blue-600 text-sm transition-colors">
-              Cookie Policy
-            </a>
+
           </div>
         </div>
       </div>

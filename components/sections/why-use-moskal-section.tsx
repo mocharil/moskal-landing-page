@@ -5,7 +5,11 @@ import { motion } from "framer-motion"
 import { Eye, Clock, Scale, Zap, MapPin, Brain } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-export function WhyUseMoskalSection() {
+interface WhyUseMoskalSectionProps {
+  onGetStarted: () => void
+}
+
+export function WhyUseMoskalSection({ onGetStarted }: WhyUseMoskalSectionProps) {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null)
 
   const features = [
@@ -458,45 +462,7 @@ export function WhyUseMoskalSection() {
   }
 
   return (
-    <section id="about" className="py-24 relative overflow-hidden bg-gradient-to-b from-white via-blue-50/30 to-white">
-      {/* Animated background particles */}
-      <div className="absolute inset-0 overflow-hidden">
-        {Array.from({ length: 50 }).map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 rounded-full bg-blue-500/30"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              opacity: [0, 1, 0],
-              scale: [0, 1, 0],
-              y: [0, -30, 0],
-            }}
-            transition={{
-              duration: 4 + Math.random() * 4,
-              repeat: Number.POSITIVE_INFINITY,
-              delay: Math.random() * 5,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Animated tech grid */}
-      <div className="absolute inset-0 opacity-5">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `
-            linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px)
-          `,
-            backgroundSize: "50px 50px",
-          }}
-        />
-      </div>
-
+    <section id="about" className="py-24 relative overflow-hidden bg-slate-50">
       {/* Floating geometric shapes */}
       <div className="absolute inset-0 overflow-hidden">
         {Array.from({ length: 10 }).map((_, i) => (
@@ -527,7 +493,7 @@ export function WhyUseMoskalSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
             Why Use <span className="text-blue-600">Moskal</span>?
@@ -537,6 +503,16 @@ export function WhyUseMoskalSection() {
             the insights you need before narratives become headlines.
           </p>
         </motion.div>
+
+        {/* Gradient Separator */}
+        <motion.div
+          initial={{ opacity: 0, scaleX: 0 }}
+          whileInView={{ opacity: 1, scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2, ease: "circOut" }}
+          className="h-px w-full origin-center mx-auto mb-12 bg-gradient-to-r from-transparent via-blue-500/60 to-transparent"
+          style={{ maxWidth: "32rem" }} // max-w-lg (two-thirds of the paragraph's max-w-3xl)
+        />
 
         {/* Feature Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
@@ -596,9 +572,10 @@ export function WhyUseMoskalSection() {
 
                   {/* Hover indicator */}
                   <motion.div
-                    className="mt-6 flex items-center gap-2 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    className="mt-6 flex items-center gap-2 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer"
                     style={{ color: feature.accentColor }}
                     whileHover={{ x: 5 }}
+                    onClick={onGetStarted}
                   >
                     <span>Explore this feature</span>
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

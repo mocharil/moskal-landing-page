@@ -138,8 +138,8 @@ export default function LandingPage() {
       <HeroSection onGetStarted={handleGetStarted} />
       <WhatIsMoskalSection />
       <FeaturesSection onGetStarted={handleGetStarted} />
-      <ProductsSection />
-      <WhyUseMoskalSection />
+      <ProductsSection onGetStarted={handleGetStarted} />
+      <WhyUseMoskalSection onGetStarted={handleGetStarted} />
       <ContactSection />
       <Footer />
 

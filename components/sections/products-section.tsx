@@ -10,7 +10,11 @@ import { ComparisonPlatform } from "@/components/interactive/comparison-platform
 import ShineBorder from "@/components/ui/shine-border"
 import ShimmerButton from "@/components/ui/shimmer-button"
 
-export function ProductsSection() {
+interface ProductsSectionProps {
+  onGetStarted: () => void
+}
+
+export function ProductsSection({ onGetStarted }: ProductsSectionProps) {
   return (
     <section id="products" className="py-24 relative overflow-hidden bg-gradient-to-br from-blue-50/50 to-white">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(0,71,171,0.08),transparent_50%)]" />
@@ -60,7 +64,7 @@ export function ProductsSection() {
                 ))}
               </ul>
               <ShimmerButton
-                onClick={() => window.open("https://dashboard.moskal.id/", "_blank")}
+                onClick={onGetStarted}
                 className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg px-6 py-3"
                 shimmerColor="#ffffff"
                 shimmerSize="0.1em"
@@ -116,7 +120,7 @@ export function ProductsSection() {
                 ))}
               </ul>
               <ShimmerButton
-                onClick={() => window.open("https://dashboard.moskal.id/", "_blank")}
+                onClick={onGetStarted}
                 className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg px-6 py-3"
                 shimmerColor="#ffffff"
                 shimmerSize="0.1em"
@@ -173,7 +177,7 @@ export function ProductsSection() {
                 ))}
               </ul>
               <ShimmerButton
-                onClick={() => window.open("https://dashboard.moskal.id/", "_blank")}
+                onClick={onGetStarted}
                 className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg px-6 py-3"
                 shimmerColor="#ffffff"
                 shimmerSize="0.1em"
@@ -230,7 +234,7 @@ export function ProductsSection() {
                 ))}
               </ul>
               <ShimmerButton
-                onClick={() => window.open("https://dashboard.moskal.id/", "_blank")}
+                onClick={onGetStarted}
                 className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg px-6 py-3"
                 shimmerColor="#ffffff"
                 shimmerSize="0.1em"
@@ -288,7 +292,7 @@ export function ProductsSection() {
                 ))}
               </ul>
               <ShimmerButton
-                onClick={() => window.open("https://dashboard.moskal.id/", "_blank")}
+                onClick={onGetStarted}
                 className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg px-6 py-3"
                 shimmerColor="#ffffff"
                 shimmerSize="0.1em"

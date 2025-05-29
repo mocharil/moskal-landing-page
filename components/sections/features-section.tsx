@@ -231,8 +231,9 @@ export function FeaturesSection({ onGetStarted }: FeaturesSectionProps) {
 
                   {/* Learn more link */}
                   <motion.div
-                    className="flex items-center gap-2 text-blue-600 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    className="flex items-center gap-2 text-blue-600 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer"
                     whileHover={{ x: 5 }}
+                    onClick={onGetStarted}
                   >
                     <span>Explore feature</span>
                     <ArrowRight className="h-4 w-4" />

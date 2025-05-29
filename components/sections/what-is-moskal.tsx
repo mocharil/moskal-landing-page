@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { SimpleGlobe } from "@/components/ui/simple-globe"
+import GlobeDemo from "@/components/globe-demo"
 
 export function WhatIsMoskalSection() {
   return (
@@ -150,7 +150,7 @@ export function WhatIsMoskalSection() {
                 <div className="text-xs text-gray-500 bg-blue-50 px-3 py-1 rounded-full">Indonesia Focus</div>
               </div>
 
-              <div className="text-center mb-4">
+              <div className="relative z-10 text-center mb-4">
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">
                   Real-time{" "}
                   <span className="text-[#0047AB]">
@@ -174,8 +174,10 @@ export function WhatIsMoskalSection() {
               </div>
 
               {/* Interactive Globe */}
-              <div className="relative h-80 w-full">
-                <SimpleGlobe className="top-0" />
+              <div className="relative h-80 w-full flex items-center justify-center">
+                <div className="w-full h-80 -translate-y-24">
+                  <GlobeDemo />
+                </div>
 
                 {/* Floating connection indicators */}
                 <div className="absolute top-4 right-4 space-y-2">
