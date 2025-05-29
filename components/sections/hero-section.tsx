@@ -2,7 +2,7 @@
 import { ArrowRight } from "lucide-react"
 import { motion } from "framer-motion"
 import dynamic from "next/dynamic"
-import { AnimatedHeading } from "@/components/ui/animated-heading"
+import { WordRotate } from "@/components/ui/word-rotate"
 import ShineBorder from "@/components/ui/shine-border"
 import ShimmerButton from "@/components/ui/shimmer-button"
 
@@ -62,18 +62,16 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="mb-6"
           >
-            <AnimatedHeading
-              text="AI that helps you track "
-              rotatingTexts={[
-                "public sentiment",
-                "what people say",
-                "market trends",
-                "brand presence",
-                "audience engagement",
-                "online conversations",
-                "emerging narratives",
+            <WordRotate
+              words={[
+                "AI that helps you track public sentiment",
+                "AI that helps you track what people say",
+                "AI that helps you track market trends",
+                "AI that helps you track brand presence",
+                "AI that helps you track audience engagement",
+                "AI that helps you track online conversations",
+                "AI that helps you track emerging narratives",
               ]}
-              primaryWord="AI"
               className="text-4xl sm:text-5xl md:text-7xl font-bold text-gradient-blue leading-tight"
             />
             <div className="text-4xl sm:text-5xl md:text-7xl font-bold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 bg-clip-text text-transparent leading-tight mt-2">
@@ -120,6 +118,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
             duration={14}
             color={["#3b82f6", "#60a5fa", "#93c5fd"]}
           >
+            {/* This div and its content are now children of ShineBorder */}
             <div className="w-full h-[300px] md:h-[500px] max-w-5xl overflow-hidden rounded-lg">
               <MoskalDashboard />
             </div>

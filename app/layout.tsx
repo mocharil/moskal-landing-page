@@ -8,10 +8,10 @@ import { Toaster } from "@/components/ui/toaster"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Moskal - AI-Powered Sentiment Monitoring for Indonesia",
+  title: "Moskal.id: AI-Powered Social Media Monitoring & Trend Analysis in Indonesia",
   description:
-    "Track public sentiment across Indonesia with AI. Real-time monitoring, analysis, and insights from social media conversations.",
-  keywords: ["sentiment analysis", "social media monitoring", "Indonesia", "AI", "public opinion", "analytics"],
+    "Moskal empowers businesses and organizations to track millions of public conversations across Indonesia. Leverage our AI platform to surface early signals, understand shifting narratives, and monitor sentiment trends in real-time for strategic decision-making.",
+  keywords: ["social media monitoring", "sentiment analysis", "trend analysis", "Indonesia", "AI", "public opinion", "brand monitoring", "market research", "analytics"],
   authors: [{ name: "Moskal Team" }],
   creator: "Moskal",
   publisher: "Moskal",
@@ -33,10 +33,10 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://moskal.id",
-    title: "Moskal - AI-Powered Sentiment Monitoring for Indonesia",
+    title: "Moskal.id: AI-Powered Social Media Monitoring & Trend Analysis in Indonesia",
     description:
-      "Track public sentiment across Indonesia with AI. Real-time monitoring, analysis, and insights from social media conversations.",
-    siteName: "Moskal",
+      "Moskal empowers businesses and organizations to track millions of public conversations across Indonesia. Leverage our AI platform to surface early signals, understand shifting narratives, and monitor sentiment trends in real-time for strategic decision-making.",
+    siteName: "Moskal.id",
     images: [
       {
         url: "/moskal-icon.png",
@@ -48,9 +48,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Moskal - AI-Powered Sentiment Monitoring for Indonesia",
+    title: "Moskal.id: AI-Powered Social Media Monitoring & Trend Analysis in Indonesia",
     description:
-      "Track public sentiment across Indonesia with AI. Real-time monitoring, analysis, and insights from social media conversations.",
+      "Moskal empowers businesses and organizations to track millions of public conversations across Indonesia. Leverage our AI platform to surface early signals, understand shifting narratives, and monitor sentiment trends in real-time for strategic decision-making.",
     images: ["/moskal-icon.png"],
     creator: "@moskal_id",
   },

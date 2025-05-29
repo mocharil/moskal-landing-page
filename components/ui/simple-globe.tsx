@@ -28,22 +28,22 @@ export function SimpleGlobe({ className }: SimpleGlobeProps) {
 
   // Major Indonesian cities with accurate relative positions
   const cities = [
-    { name: "Jakarta", x: 35, y: 65, size: "large", color: "#FFD700", population: "10.5M" },
-    { name: "Surabaya", x: 55, y: 68, size: "medium", color: "#FF6B6B", population: "2.9M" },
-    { name: "Medan", x: 15, y: 25, size: "medium", color: "#4ECDC4", population: "2.4M" },
-    { name: "Bandung", x: 32, y: 67, size: "medium", color: "#45B7D1", population: "2.5M" },
-    { name: "Makassar", x: 75, y: 75, size: "medium", color: "#96CEB4", population: "1.4M" },
-    { name: "Denpasar", x: 60, y: 78, size: "medium", color: "#FFEAA7", population: "900K" },
-    { name: "Yogyakarta", x: 45, y: 68, size: "small", color: "#DDA0DD", population: "400K" },
-    { name: "Palembang", x: 25, y: 55, size: "small", color: "#98D8C8", population: "1.7M" },
-    { name: "Manado", x: 85, y: 35, size: "small", color: "#F7DC6F", population: "450K" },
-    { name: "Banda Aceh", x: 12, y: 15, size: "small", color: "#BB8FCE", population: "220K" },
+    { name: "Jakarta", x: 35, y: 65, size: "large", color: "#00BFFF", population: "10.5M" }, // DeepSkyBlue
+    { name: "Surabaya", x: 55, y: 68, size: "medium", color: "#87CEEB", population: "2.9M" }, // SkyBlue
+    { name: "Medan", x: 15, y: 25, size: "medium", color: "#AFEEEE", population: "2.4M" }, // PaleTurquoise
+    { name: "Bandung", x: 32, y: 67, size: "medium", color: "#40E0D0", population: "2.5M" }, // Turquoise
+    { name: "Makassar", x: 75, y: 75, size: "medium", color: "#48D1CC", population: "1.4M" }, // MediumTurquoise
+    { name: "Denpasar", x: 60, y: 78, size: "medium", color: "#00CED1", population: "900K" }, // DarkTurquoise
+    { name: "Yogyakarta", x: 45, y: 68, size: "small", color: "#20B2AA", population: "400K" }, // LightSeaGreen
+    { name: "Palembang", x: 25, y: 55, size: "small", color: "#5F9EA0", population: "1.7M" }, // CadetBlue
+    { name: "Manado", x: 85, y: 35, size: "small", color: "#B0E0E6", population: "450K" }, // PowderBlue
+    { name: "Banda Aceh", x: 12, y: 15, size: "small", color: "#ADD8E6", population: "220K" }, // LightBlue
   ]
 
   return (
     <div className={cn("relative w-full h-full flex items-center justify-center", className)}>
       {/* Main Map Container */}
-      <div className="relative w-96 h-80 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 rounded-2xl shadow-2xl overflow-hidden border border-blue-500/20">
+      <div className="relative w-96 h-80 bg-[#030E4F] rounded-2xl shadow-2xl overflow-hidden border border-blue-700/30">
         
         {/* Animated Background Grid */}
         <div className="absolute inset-0 opacity-20">
@@ -61,7 +61,7 @@ export function SimpleGlobe({ className }: SimpleGlobeProps) {
         <div className="absolute inset-0">
           {/* Sumatra */}
           <div 
-            className="absolute bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg"
+            className="absolute bg-[#1B3A6F] shadow-lg"
             style={{ 
               left: '8%', 
               top: '15%', 
@@ -74,7 +74,7 @@ export function SimpleGlobe({ className }: SimpleGlobeProps) {
           
           {/* Java */}
           <div 
-            className="absolute bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg"
+            className="absolute bg-[#1B3A6F] shadow-lg"
             style={{ 
               left: '28%', 
               top: '62%', 
@@ -86,7 +86,7 @@ export function SimpleGlobe({ className }: SimpleGlobeProps) {
           
           {/* Kalimantan */}
           <div 
-            className="absolute bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg"
+            className="absolute bg-[#1B3A6F] shadow-lg"
             style={{ 
               left: '45%', 
               top: '35%', 
@@ -98,7 +98,7 @@ export function SimpleGlobe({ className }: SimpleGlobeProps) {
           
           {/* Sulawesi */}
           <div 
-            className="absolute bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg"
+            className="absolute bg-[#1B3A6F] shadow-lg"
             style={{ 
               left: '72%', 
               top: '40%', 
@@ -111,7 +111,7 @@ export function SimpleGlobe({ className }: SimpleGlobeProps) {
           
           {/* Papua */}
           <div 
-            className="absolute bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg"
+            className="absolute bg-[#1B3A6F] shadow-lg"
             style={{ 
               left: '82%', 
               top: '50%', 
@@ -123,7 +123,7 @@ export function SimpleGlobe({ className }: SimpleGlobeProps) {
 
           {/* Bali & Nusa Tenggara */}
           <div 
-            className="absolute bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg"
+            className="absolute bg-[#1B3A6F] shadow-lg"
             style={{ 
               left: '58%', 
               top: '75%', 

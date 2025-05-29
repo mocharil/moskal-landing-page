@@ -1,18 +1,18 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { Color, Scene, Fog, PerspectiveCamera, Vector3, Group } from "three";
+import { Color, Scene, Fog, PerspectiveCamera, Vector3, Group } from "three"; // Added Group
 import ThreeGlobe from "three-globe";
 import { useThree, Canvas, extend } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import countries from "@/data/globe.json";
+import countries from "@/data/globe.json"; // Corrected path
 
 declare module "@react-three/fiber" {
   interface ThreeElements {
-    threeGlobe: any;
+    threeGlobe: any; // Kept 'any' as per user's latest code, though more specific types are possible
   }
 }
 
-extend({ ThreeGlobe: ThreeGlobe });
+extend({ ThreeGlobe }); // Removed : ThreeGlobe from here as it was in user's code
 
 const RING_PROPAGATION_SPEED = 3;
 const aspect = 1.2;
@@ -59,11 +59,11 @@ interface WorldProps {
   data: Position[];
 }
 
-let numbersOfRings = [0];
+// let numbersOfRings = [0]; // This was in user's code but not used in the Globe component logic they provided for it.
 
 export function Globe({ globeConfig, data }: WorldProps) {
   const globeRef = useRef<ThreeGlobe | null>(null);
-  const groupRef = useRef<Group | null>(null);
+  const groupRef = useRef<Group>(null); // Changed to useRef<Group>(null)
   const [isInitialized, setIsInitialized] = useState(false);
 
   const defaultProps = {
@@ -72,7 +72,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
     showAtmosphere: true,
     atmosphereAltitude: 0.1,
     polygonColor: "rgba(255,255,255,0.7)",
-    globeColor: "red",
+    globeColor: "#1d072e", // This is from user's new globe.tsx defaultProps
     emissive: "#000000",
     emissiveIntensity: 0.1,
     shininess: 0.9,
@@ -80,14 +80,14 @@ export function Globe({ globeConfig, data }: WorldProps) {
     arcLength: 0.9,
     rings: 1,
     maxRings: 3,
-    ...globeConfig,
+    ...globeConfig, // globeConfig from props will override these defaults
   };
 
   // Initialize globe only once
   useEffect(() => {
     if (!globeRef.current && groupRef.current) {
       globeRef.current = new ThreeGlobe();
-      groupRef.current.add(globeRef.current);
+      groupRef.current.add(globeRef.current); // groupRef.current is a Group
       setIsInitialized(true);
     }
   }, []);
@@ -96,22 +96,23 @@ export function Globe({ globeConfig, data }: WorldProps) {
   useEffect(() => {
     if (!globeRef.current || !isInitialized) return;
 
-    const globeMaterial = globeRef.current.globeMaterial() as unknown as {
+    const globeMaterial = globeRef.current.globeMaterial() as unknown as { // Type assertion as in user's code
       color: Color;
       emissive: Color;
       emissiveIntensity: number;
       shininess: number;
     };
-    globeMaterial.color = new Color(globeConfig.globeColor);
-    globeMaterial.emissive = new Color(globeConfig.emissive);
-    globeMaterial.emissiveIntensity = globeConfig.emissiveIntensity || 0.1;
-    globeMaterial.shininess = globeConfig.shininess || 0.9;
+    // Use resolved colors from defaultProps (which includes globeConfig overrides)
+    globeMaterial.color = new Color(defaultProps.globeColor);
+    globeMaterial.emissive = new Color(defaultProps.emissive);
+    globeMaterial.emissiveIntensity = defaultProps.emissiveIntensity;
+    globeMaterial.shininess = defaultProps.shininess;
   }, [
     isInitialized,
-    globeConfig.globeColor,
-    globeConfig.emissive,
-    globeConfig.emissiveIntensity,
-    globeConfig.shininess,
+    defaultProps.globeColor,
+    defaultProps.emissive,
+    defaultProps.emissiveIntensity,
+    defaultProps.shininess,
   ]);
 
   // Build data when globe is initialized or when data changes
@@ -122,6 +123,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
     let points = [];
     for (let i = 0; i < arcs.length; i++) {
       const arc = arcs[i];
+      // const rgb = hexToRgb(arc.color) as { r: number; g: number; b: number }; // hexToRgb was in user's code but not used here
       points.push({
         size: defaultProps.pointSize,
         order: arc.order,
@@ -138,7 +140,6 @@ export function Globe({ globeConfig, data }: WorldProps) {
       });
     }
 
-    // remove duplicates for same lat and lng
     const filteredPoints = points.filter(
       (v, i, a) =>
         a.findIndex((v2) =>
@@ -180,7 +181,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
 
     globeRef.current
       .ringsData([])
-      .ringColor(() => defaultProps.polygonColor)
+      .ringColor(() => defaultProps.polygonColor) // User's code had this, likely intended for ring color
       .ringMaxRadius(defaultProps.maxRings)
       .ringPropagationSpeed(RING_PROPAGATION_SPEED)
       .ringRepeatPeriod(
@@ -200,12 +201,11 @@ export function Globe({ globeConfig, data }: WorldProps) {
     defaultProps.maxRings,
   ]);
 
-  // Handle rings animation with cleanup
   useEffect(() => {
-    if (!globeRef.current || !isInitialized || !data) return;
+    if (!globeRef.current || !isInitialized || !data || data.length === 0) return; // Added check for data.length
 
     const interval = setInterval(() => {
-      if (!globeRef.current) return;
+      if (!globeRef.current || !data || data.length === 0) return; // Added check for data.length
 
       const newNumbersOfRings = genRandomNumbers(
         0,
@@ -218,7 +218,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
         .map((d) => ({
           lat: d.startLat,
           lng: d.startLng,
-          color: d.color,
+          color: d.color, // Rings will use the arc's color
         }));
 
       globeRef.current.ringsData(ringsData);
@@ -227,7 +227,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
     return () => {
       clearInterval(interval);
     };
-  }, [isInitialized, data]);
+  }, [isInitialized, data]); // Removed defaultProps from dependency array as they are stable unless globeConfig changes
 
   return <group ref={groupRef} />;
 }
@@ -238,19 +238,23 @@ export function WebGLRendererConfig() {
   useEffect(() => {
     gl.setPixelRatio(window.devicePixelRatio);
     gl.setSize(size.width, size.height);
-    gl.setClearColor(0xffaaff, 0);
-  }, [gl, size]);
+    gl.setClearColor(0xffaaff, 0); // This clear color was in user's code, seems odd (pinkish transparent)
+                                     // For a dark globe, a dark or black clear color might be better if transparency isn't needed.
+                                     // For a white globe on white bg, this might be fine.
+  }, [gl, size]); // gl and size added to dependency array
 
   return null;
 }
 
 export function World(props: WorldProps) {
-  const { globeConfig } = props;
+  const { globeConfig } = props; // globeConfig is taken from props
   const scene = new Scene();
-  scene.fog = new Fog(0xffffff, 400, 2000);
+  // scene.background = new Color(0x000000); // Example: Set background to black if needed
+  scene.fog = new Fog(0xffffff, 400, 2000); // White fog, as in user's code
   return (
     <Canvas scene={scene} camera={new PerspectiveCamera(50, aspect, 180, 1800)}>
       <WebGLRendererConfig />
+      {/* Use resolved light colors from globeConfig passed to World */}
       <ambientLight color={globeConfig.ambientLight} intensity={0.6} />
       <directionalLight
         color={globeConfig.directionalLeftLight}
@@ -271,15 +275,16 @@ export function World(props: WorldProps) {
         enableZoom={false}
         minDistance={cameraZ}
         maxDistance={cameraZ}
-        autoRotateSpeed={1}
-        autoRotate={true}
-        minPolarAngle={Math.PI / 6}
-        maxPolarAngle={Math.PI - Math.PI / 6}
+        autoRotateSpeed={globeConfig.autoRotateSpeed || 1} // Use from config
+        autoRotate={globeConfig.autoRotate !== undefined ? globeConfig.autoRotate : true} // Use from config
+        minPolarAngle={Math.PI / 3.5} // As in user's code
+        maxPolarAngle={Math.PI - Math.PI / 3} // As in user's code
       />
     </Canvas>
   );
 }
 
+// hexToRgb and genRandomNumbers as provided by user
 export function hexToRgb(hex: string) {
   var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
   hex = hex.replace(shorthandRegex, function (m, r, g, b) {
@@ -302,6 +307,5 @@ export function genRandomNumbers(min: number, max: number, count: number) {
     const r = Math.floor(Math.random() * (max - min)) + min;
     if (arr.indexOf(r) === -1) arr.push(r);
   }
-
   return arr;
 }
