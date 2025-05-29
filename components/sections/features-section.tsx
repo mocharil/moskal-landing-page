@@ -117,7 +117,7 @@ export function FeaturesSection({ onGetStarted }: FeaturesSectionProps) {
               description:
                 "Whether it's a government policy, corporate announcement, or social campaign—Moskal shows you how the public is reacting. Through real-time sentiment analysis and conversation tracking, you'll see the emotional pulse behind every trending topic.",
               color: "bg-blue-600",
-              image: "/images/moskal-dashboard-1.png",
+              image: "/images/moskal-dashboard-1.webp",
             },
             {
               icon: <BarChart3 className="h-8 w-8" />,
@@ -126,7 +126,7 @@ export function FeaturesSection({ onGetStarted }: FeaturesSectionProps) {
               description:
                 "How long did your message stay relevant? When did the conversation peak, and what triggered the spike? Moskal helps you look beyond vanity metrics to uncover the true lifespan of a narrative.",
               color: "bg-indigo-600",
-              image: "/images/moskal-dashboard-2.png",
+              image: "/images/moskal-dashboard-2.webp",
             },
             {
               icon: <MapPin className="h-8 w-8" />,
@@ -135,7 +135,7 @@ export function FeaturesSection({ onGetStarted }: FeaturesSectionProps) {
               description:
                 "Moskal doesn't just show what people are saying, but where. Whether you're focused on national sentiment or zooming into regional hotspots, our geo-tagged insights help you understand the nuance of different communities.",
               color: "bg-purple-600",
-              image: "/images/moskal-dashboard-3.png",
+              image: "/images/moskal-dashboard-3.webp",
             },
             {
               icon: <AlertTriangle className="h-8 w-8" />,
@@ -144,7 +144,7 @@ export function FeaturesSection({ onGetStarted }: FeaturesSectionProps) {
               description:
                 "Online conversations are often the earliest indicators of real-world change. With Moskal, you get early warning signals when the public mood begins to shift—so you can act before a trend becomes a crisis.",
               color: "bg-red-600",
-              image: "/images/moskal-dashboard-4.png",
+              image: "/images/moskal-dashboard-4.webp",
             },
             {
               icon: <Users className="h-8 w-8" />,
@@ -153,7 +153,7 @@ export function FeaturesSection({ onGetStarted }: FeaturesSectionProps) {
               description:
                 "Is the conversation being led by citizens? Media? Influencers? Troll farms? Moskal reveals the anatomy of digital discourse—helping you see which actors are amplifying narratives, and how their influence spreads.",
               color: "bg-green-600",
-              image: "/images/moskal-dashboard-5.png",
+              image: "/images/moskal-dashboard-5.webp",
             },
             {
               icon: <Brain className="h-8 w-8" />,
@@ -162,7 +162,7 @@ export function FeaturesSection({ onGetStarted }: FeaturesSectionProps) {
               description:
                 "Social media can feel chaotic. Moskal brings clarity by mapping connections between topics, keywords, and sentiments—turning noise into insight. You'll see emerging frames, overlapping agendas, and shifting priorities.",
               color: "bg-amber-600",
-              image: "/images/moskal-dashboard-6.png",
+              image: "/images/moskal-dashboard-6.webp",
             },
           ].map((feature, index) => (
             <motion.div

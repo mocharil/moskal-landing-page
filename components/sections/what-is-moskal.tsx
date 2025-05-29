@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Globe } from "@/components/ui/globe"
+import { SimpleGlobe } from "@/components/ui/simple-globe"
 
 export function WhatIsMoskalSection() {
   return (
@@ -173,9 +173,9 @@ export function WhatIsMoskalSection() {
                 </p>
               </div>
 
-              {/* Interactive 3D Globe */}
+              {/* Interactive Globe */}
               <div className="relative h-80 w-full">
-                <Globe className="top-0" />
+                <SimpleGlobe className="top-0" />
 
                 {/* Floating connection indicators */}
                 <div className="absolute top-4 right-4 space-y-2">

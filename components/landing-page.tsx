@@ -1,21 +1,36 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { Button } from "@/components/ui/button"
 import { Menu, X } from "lucide-react"
 import Link from "next/link"
+import dynamic from "next/dynamic"
 import { motion, AnimatePresence } from "framer-motion"
 import { MoskalLogo } from "@/components/ui/moskal-logo"
 
-// Import all sections
+// Import critical sections immediately
 import { HeroSection } from "@/components/sections/hero-section"
-import { WhatIsMoskalSection } from "@/components/sections/what-is-moskal"
-import { FeaturesSection } from "@/components/sections/features-section"
-import { ProductsSection } from "@/components/sections/products-section"
-import { WhyUseMoskalSection } from "@/components/sections/why-use-moskal-section"
-import { ContactSection } from "@/components/sections/contact-section"
 import { Footer } from "@/components/sections/footer"
-import { Modal } from "@/components/sections/modal"
+
+// Lazy load non-critical sections
+const WhatIsMoskalSection = dynamic(() => import("@/components/sections/what-is-moskal").then(mod => ({ default: mod.WhatIsMoskalSection })), {
+  loading: () => <div className="h-96 bg-gray-50 animate-pulse" />
+})
+const FeaturesSection = dynamic(() => import("@/components/sections/features-section").then(mod => ({ default: mod.FeaturesSection })), {
+  loading: () => <div className="h-96 bg-gray-50 animate-pulse" />
+})
+const ProductsSection = dynamic(() => import("@/components/sections/products-section").then(mod => ({ default: mod.ProductsSection })), {
+  loading: () => <div className="h-96 bg-gray-50 animate-pulse" />
+})
+const WhyUseMoskalSection = dynamic(() => import("@/components/sections/why-use-moskal-section").then(mod => ({ default: mod.WhyUseMoskalSection })), {
+  loading: () => <div className="h-96 bg-gray-50 animate-pulse" />
+})
+const ContactSection = dynamic(() => import("@/components/sections/contact-section").then(mod => ({ default: mod.ContactSection })), {
+  loading: () => <div className="h-96 bg-gray-50 animate-pulse" />
+})
+const Modal = dynamic(() => import("@/components/sections/modal").then(mod => ({ default: mod.Modal })), {
+  ssr: false
+})
 
 export default function LandingPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)

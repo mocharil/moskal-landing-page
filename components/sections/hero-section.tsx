@@ -1,10 +1,20 @@
 "use client"
 import { ArrowRight } from "lucide-react"
 import { motion } from "framer-motion"
+import dynamic from "next/dynamic"
 import { AnimatedHeading } from "@/components/ui/animated-heading"
-import { MoskalDashboard } from "@/components/sections/moskal-dashboard"
 import ShineBorder from "@/components/ui/shine-border"
 import ShimmerButton from "@/components/ui/shimmer-button"
+
+// Lazy load heavy dashboard component
+const MoskalDashboard = dynamic(() => import("@/components/sections/moskal-dashboard").then(mod => ({ default: mod.MoskalDashboard })), {
+  loading: () => (
+    <div className="w-full h-[300px] md:h-[500px] bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg flex items-center justify-center">
+      <div className="text-blue-600 text-lg font-medium">Loading Dashboard Preview...</div>
+    </div>
+  ),
+  ssr: false
+})
 
 interface HeroSectionProps {
   onGetStarted: () => void
@@ -18,25 +28,26 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
         <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-blue-100/30 to-transparent" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.1),transparent_65%)]" />
 
-        {/* Animated background elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          {Array.from({ length: 20 }).map((_, i) => (
-            <motion.div
+        {/* Static background elements - deterministic positioning */}
+        <div className="absolute inset-0 overflow-hidden opacity-30">
+          {[
+            { left: 23.8, top: 21.9, delay: 2.87, duration: 4.26 },
+            { left: 37.8, top: 47.3, delay: 0.91, duration: 4.46 },
+            { left: 2.38, top: 63.5, delay: 2.45, duration: 4.77 },
+            { left: 38.7, top: 9.08, delay: 1.07, duration: 3.42 },
+            { left: 76.2, top: 34.3, delay: 2.22, duration: 4.73 },
+            { left: 58.9, top: 88.7, delay: 2.55, duration: 4.92 },
+            { left: 12.8, top: 57.9, delay: 1.92, duration: 3.79 },
+            { left: 7.94, top: 33.4, delay: 2.21, duration: 3.50 }
+          ].map((dot, i) => (
+            <div
               key={i}
-              className="absolute w-2 h-2 bg-blue-200/40 rounded-full"
+              className="absolute w-1 h-1 bg-blue-300/60 rounded-full animate-pulse"
               style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-                opacity: [0.2, 0.6, 0.2],
-                scale: [1, 1.5, 1],
-                y: [0, -20, 0],
-              }}
-              transition={{
-                duration: 4 + Math.random() * 2,
-                repeat: Number.POSITIVE_INFINITY,
-                delay: Math.random() * 2,
+                left: `${dot.left}%`,
+                top: `${dot.top}%`,
+                animationDelay: `${dot.delay}s`,
+                animationDuration: `${dot.duration}s`
               }}
             />
           ))}

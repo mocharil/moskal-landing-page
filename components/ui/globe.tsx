@@ -1,158 +1,307 @@
-"use client"
+"use client";
+import { useEffect, useRef, useState } from "react";
+import { Color, Scene, Fog, PerspectiveCamera, Vector3 } from "three";
+import ThreeGlobe from "three-globe";
+import { useThree, Canvas, extend } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
+import countries from "@/data/globe.json";
 
-import createGlobe, { type COBEOptions } from "cobe"
-import { useCallback, useEffect, useRef, useState } from "react"
-
-import { cn } from "@/lib/utils"
-
-const GLOBE_CONFIG: COBEOptions = {
-  width: 800,
-  height: 800,
-  onRender: () => {},
-  devicePixelRatio: 2,
-  phi: 2.1, // Longitude rotation to center on Indonesia
-  theta: 0.4, // Increased vertical rotation to move Indonesia higher up
-  dark: 0,
-  diffuse: 0.4,
-  mapSamples: 16000,
-  mapBrightness: 1.2,
-  baseColor: [1, 1, 1],
-  markerColor: [0 / 255, 71 / 255, 171 / 255], // Moskal blue color
-  glowColor: [0.8, 0.9, 1],
-  markers: [
-    // Major Indonesian cities - larger markers
-    { location: [-6.2088, 106.8456], size: 0.12 }, // Jakarta (capital)
-    { location: [-7.2575, 112.7521], size: 0.08 }, // Surabaya
-    { location: [3.5952, 98.6722], size: 0.07 }, // Medan
-    { location: [-5.1477, 119.4327], size: 0.06 }, // Makassar
-    { location: [-6.9175, 107.6191], size: 0.06 }, // Bandung
-    { location: [-8.65, 115.2167], size: 0.06 }, // Denpasar, Bali
-
-    // Provincial capitals and major cities
-    { location: [0.5333, 101.45], size: 0.05 }, // Pekanbaru, Riau
-    { location: [-0.9492, 100.3543], size: 0.05 }, // Padang, West Sumatra
-    { location: [1.4518, 124.8455], size: 0.05 }, // Manado, North Sulawesi
-    { location: [-7.7956, 110.3695], size: 0.05 }, // Yogyakarta
-    { location: [-6.9147, 109.0921], size: 0.04 }, // Purwokerto, Central Java
-    { location: [-7.0051, 110.4381], size: 0.04 }, // Semarang, Central Java
-    { location: [-8.5833, 116.1167], size: 0.04 }, // Mataram, Lombok
-    { location: [-3.3194, 114.5906], size: 0.04 }, // Banjarmasin, South Kalimantan
-    { location: [0.0333, 109.3333], size: 0.04 }, // Pontianak, West Kalimantan
-    { location: [1.6953, 101.4428], size: 0.04 }, // Batam, Riau Islands
-    { location: [-2.5489, 118.0149], size: 0.04 }, // Palu, Central Sulawesi
-    { location: [-5.4472, 105.2667], size: 0.04 }, // Bandar Lampung, Lampung
-    { location: [5.5483, 95.3238], size: 0.04 }, // Banda Aceh, Aceh
-    { location: [2.7297, 98.6958], size: 0.04 }, // Binjai, North Sumatra
-
-    // Additional cities and regions
-    { location: [-1.2379, 116.8529], size: 0.03 }, // Samarinda, East Kalimantan
-    { location: [3.7436, 98.6753], size: 0.03 }, // Tebing Tinggi, North Sumatra
-    { location: [-6.1745, 106.8227], size: 0.03 }, // Tangerang, Banten
-    { location: [-6.3667, 106.8333], size: 0.03 }, // Depok, West Java
-    { location: [-6.2297, 106.9756], size: 0.03 }, // Bekasi, West Java
-    { location: [-6.595, 106.7969], size: 0.03 }, // Bogor, West Java
-    { location: [-6.8915, 107.6107], size: 0.03 }, // Cimahi, West Java
-    { location: [-7.3297, 108.2167], size: 0.03 }, // Tasikmalaya, West Java
-    { location: [-6.7014, 108.5581], size: 0.03 }, // Cirebon, West Java
-    { location: [-7.5619, 110.8316], size: 0.03 }, // Surakarta (Solo), Central Java
-    { location: [-6.9667, 110.4167], size: 0.03 }, // Salatiga, Central Java
-    { location: [-8.1689, 113.7006], size: 0.03 }, // Malang, East Java
-    { location: [-7.9797, 112.6304], size: 0.03 }, // Kediri, East Java
-    { location: [-7.6298, 111.5239], size: 0.03 }, // Madiun, East Java
-    { location: [-8.2181, 114.3678], size: 0.03 }, // Banyuwangi, East Java
-    { location: [-8.1132, 111.9088], size: 0.03 }, // Blitar, East Java
-    { location: [-9.0648, 124.8745], size: 0.03 }, // Kupang, East Nusa Tenggara
-    { location: [-8.65, 115.2167], size: 0.03 }, // Ubud, Bali
-    { location: [-8.3405, 115.092], size: 0.03 }, // Singaraja, Bali
-    { location: [-2.9761, 104.7754], size: 0.03 }, // Palembang, South Sumatra
-    { location: [-1.6101, 103.6131], size: 0.03 }, // Jambi, Jambi
-    { location: [0.9167, 104.45], size: 0.03 }, // Tanjung Pinang, Riau Islands
-    { location: [-3.8, 102.2667], size: 0.03 }, // Bengkulu, Bengkulu
-    { location: [-0.8917, 131.2583], size: 0.03 }, // Sorong, West Papua
-    { location: [-2.5333, 140.7167], size: 0.03 }, // Jayapura, Papua
-    { location: [-3.6954, 128.1814], size: 0.03 }, // Ambon, Maluku
-    { location: [0.7893, 127.3914], size: 0.03 }, // Ternate, North Maluku
-    { location: [-4.0333, 122.5167], size: 0.03 }, // Kendari, Southeast Sulawesi
-    { location: [-1.43, 120.9567], size: 0.03 }, // Poso, Central Sulawesi
-    { location: [-0.8917, 119.8708], size: 0.03 }, // Palu, Central Sulawesi
-    { location: [1.4748, 125.1839], size: 0.03 }, // Gorontalo, Gorontalo
-    { location: [-5.139, 119.4221], size: 0.03 }, // Makassar region
-    { location: [-4.5585, 119.6208], size: 0.03 }, // Parepare, South Sulawesi
-    { location: [-2.1186, 120.1836], size: 0.03 }, // Mamuju, West Sulawesi
-  ],
+declare module "@react-three/fiber" {
+  interface ThreeElements {
+    threeGlobe: any;
+  }
 }
 
-export function Globe({
-  className,
-  config = GLOBE_CONFIG,
-}: {
-  className?: string
-  config?: COBEOptions
-}) {
-  let phi = 0
-  let width = 0
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const pointerInteracting = useRef(null)
-  const pointerInteractionMovement = useRef(0)
-  const [r, setR] = useState(0)
+extend({ ThreeGlobe: ThreeGlobe });
 
-  const updatePointerInteraction = (value: any) => {
-    pointerInteracting.current = value
-    if (canvasRef.current) {
-      canvasRef.current.style.cursor = value ? "grabbing" : "grab"
+const RING_PROPAGATION_SPEED = 3;
+const aspect = 1.2;
+const cameraZ = 300;
+
+type Position = {
+  order: number;
+  startLat: number;
+  startLng: number;
+  endLat: number;
+  endLng: number;
+  arcAlt: number;
+  color: string;
+};
+
+export type GlobeConfig = {
+  pointSize?: number;
+  globeColor?: string;
+  showAtmosphere?: boolean;
+  atmosphereColor?: string;
+  atmosphereAltitude?: number;
+  emissive?: string;
+  emissiveIntensity?: number;
+  shininess?: number;
+  polygonColor?: string;
+  ambientLight?: string;
+  directionalLeftLight?: string;
+  directionalTopLight?: string;
+  pointLight?: string;
+  arcTime?: number;
+  arcLength?: number;
+  rings?: number;
+  maxRings?: number;
+  initialPosition?: {
+    lat: number;
+    lng: number;
+  };
+  autoRotate?: boolean;
+  autoRotateSpeed?: number;
+};
+
+interface WorldProps {
+  globeConfig: GlobeConfig;
+  data: Position[];
+}
+
+let numbersOfRings = [0];
+
+export function Globe({ globeConfig, data }: WorldProps) {
+  const globeRef = useRef<ThreeGlobe | null>(null);
+  const groupRef = useRef<any>();
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  const defaultProps = {
+    pointSize: 1,
+    atmosphereColor: "#ffffff",
+    showAtmosphere: true,
+    atmosphereAltitude: 0.1,
+    polygonColor: "rgba(255,255,255,0.7)",
+    globeColor: "#1d072e",
+    emissive: "#000000",
+    emissiveIntensity: 0.1,
+    shininess: 0.9,
+    arcTime: 2000,
+    arcLength: 0.9,
+    rings: 1,
+    maxRings: 3,
+    ...globeConfig,
+  };
+
+  // Initialize globe only once
+  useEffect(() => {
+    if (!globeRef.current && groupRef.current) {
+      globeRef.current = new ThreeGlobe();
+      (groupRef.current as any).add(globeRef.current);
+      setIsInitialized(true);
     }
-  }
+  }, []);
 
-  const updateMovement = (clientX: any) => {
-    if (pointerInteracting.current !== null) {
-      const delta = clientX - pointerInteracting.current
-      pointerInteractionMovement.current = delta
-      setR(delta / 200)
+  // Build material when globe is initialized or when relevant props change
+  useEffect(() => {
+    if (!globeRef.current || !isInitialized) return;
+
+    const globeMaterial = globeRef.current.globeMaterial() as unknown as {
+      color: Color;
+      emissive: Color;
+      emissiveIntensity: number;
+      shininess: number;
+    };
+    globeMaterial.color = new Color(globeConfig.globeColor);
+    globeMaterial.emissive = new Color(globeConfig.emissive);
+    globeMaterial.emissiveIntensity = globeConfig.emissiveIntensity || 0.1;
+    globeMaterial.shininess = globeConfig.shininess || 0.9;
+  }, [
+    isInitialized,
+    globeConfig.globeColor,
+    globeConfig.emissive,
+    globeConfig.emissiveIntensity,
+    globeConfig.shininess,
+  ]);
+
+  // Build data when globe is initialized or when data changes
+  useEffect(() => {
+    if (!globeRef.current || !isInitialized || !data) return;
+
+    const arcs = data;
+    let points = [];
+    for (let i = 0; i < arcs.length; i++) {
+      const arc = arcs[i];
+      points.push({
+        size: defaultProps.pointSize,
+        order: arc.order,
+        color: arc.color,
+        lat: arc.startLat,
+        lng: arc.startLng,
+      });
+      points.push({
+        size: defaultProps.pointSize,
+        order: arc.order,
+        color: arc.color,
+        lat: arc.endLat,
+        lng: arc.endLng,
+      });
     }
-  }
 
-  const onRender = useCallback(
-    (state: Record<string, any>) => {
-      if (!pointerInteracting.current) phi += 0.005
-      state.phi = phi + r
-      state.width = width * 2
-      state.height = width * 2
-    },
-    [r],
-  )
+    // remove duplicates for same lat and lng
+    const filteredPoints = points.filter(
+      (v, i, a) =>
+        a.findIndex((v2) =>
+          ["lat", "lng"].every(
+            (k) => v2[k as "lat" | "lng"] === v[k as "lat" | "lng"],
+          ),
+        ) === i,
+    );
 
-  const onResize = () => {
-    if (canvasRef.current) {
-      width = canvasRef.current.offsetWidth
-    }
-  }
+    globeRef.current
+      .hexPolygonsData(countries.features)
+      .hexPolygonResolution(3)
+      .hexPolygonMargin(0.7)
+      .showAtmosphere(defaultProps.showAtmosphere)
+      .atmosphereColor(defaultProps.atmosphereColor)
+      .atmosphereAltitude(defaultProps.atmosphereAltitude)
+      .hexPolygonColor(() => defaultProps.polygonColor);
+
+    globeRef.current
+      .arcsData(data)
+      .arcStartLat((d: any) => (d as { startLat: number }).startLat * 1)
+      .arcStartLng((d: any) => (d as { startLng: number }).startLng * 1)
+      .arcEndLat((d: any) => (d as { endLat: number }).endLat * 1)
+      .arcEndLng((d: any) => (d as { endLng: number }).endLng * 1)
+      .arcColor((e: any) => (e as { color: string }).color)
+      .arcAltitude((e: any) => (e as { arcAlt: number }).arcAlt * 1)
+      .arcStroke(() => [0.32, 0.28, 0.3][Math.round(Math.random() * 2)])
+      .arcDashLength(defaultProps.arcLength)
+      .arcDashInitialGap((e: any) => (e as { order: number }).order * 1)
+      .arcDashGap(15)
+      .arcDashAnimateTime(() => defaultProps.arcTime);
+
+    globeRef.current
+      .pointsData(filteredPoints)
+      .pointColor((e: any) => (e as { color: string }).color)
+      .pointsMerge(true)
+      .pointAltitude(0.0)
+      .pointRadius(2);
+
+    globeRef.current
+      .ringsData([])
+      .ringColor(() => defaultProps.polygonColor)
+      .ringMaxRadius(defaultProps.maxRings)
+      .ringPropagationSpeed(RING_PROPAGATION_SPEED)
+      .ringRepeatPeriod(
+        (defaultProps.arcTime * defaultProps.arcLength) / defaultProps.rings,
+      );
+  }, [
+    isInitialized,
+    data,
+    defaultProps.pointSize,
+    defaultProps.showAtmosphere,
+    defaultProps.atmosphereColor,
+    defaultProps.atmosphereAltitude,
+    defaultProps.polygonColor,
+    defaultProps.arcLength,
+    defaultProps.arcTime,
+    defaultProps.rings,
+    defaultProps.maxRings,
+  ]);
+
+  // Handle rings animation with cleanup
+  useEffect(() => {
+    if (!globeRef.current || !isInitialized || !data) return;
+
+    const interval = setInterval(() => {
+      if (!globeRef.current) return;
+
+      const newNumbersOfRings = genRandomNumbers(
+        0,
+        data.length,
+        Math.floor((data.length * 4) / 5),
+      );
+
+      const ringsData = data
+        .filter((d, i) => newNumbersOfRings.includes(i))
+        .map((d) => ({
+          lat: d.startLat,
+          lng: d.startLng,
+          color: d.color,
+        }));
+
+      globeRef.current.ringsData(ringsData);
+    }, 2000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [isInitialized, data]);
+
+  return <group ref={groupRef} />;
+}
+
+export function WebGLRendererConfig() {
+  const { gl, size } = useThree();
 
   useEffect(() => {
-    window.addEventListener("resize", onResize)
-    onResize()
+    gl.setPixelRatio(window.devicePixelRatio);
+    gl.setSize(size.width, size.height);
+    gl.setClearColor(0xffaaff, 0);
+  }, [gl, size]);
 
-    const globe = createGlobe(canvasRef.current!, {
-      ...config,
-      width: width * 2,
-      height: width * 2,
-      onRender,
-    })
+  return null;
+}
 
-    setTimeout(() => (canvasRef.current!.style.opacity = "1"))
-    return () => globe.destroy()
-  }, [])
-
+export function World(props: WorldProps) {
+  const { globeConfig } = props;
+  const scene = new Scene();
+  scene.fog = new Fog(0xffffff, 400, 2000);
   return (
-    <div className={cn("absolute inset-0 mx-auto aspect-[1/1] w-full max-w-[600px]", className)}>
-      <canvas
-        className={cn("size-full opacity-0 transition-opacity duration-500 [contain:layout_paint_size]")}
-        ref={canvasRef}
-        onPointerDown={(e) => updatePointerInteraction(e.clientX - pointerInteractionMovement.current)}
-        onPointerUp={() => updatePointerInteraction(null)}
-        onPointerOut={() => updatePointerInteraction(null)}
-        onMouseMove={(e) => updateMovement(e.clientX)}
-        onTouchMove={(e) => e.touches[0] && updateMovement(e.touches[0].clientX)}
+    <Canvas scene={scene} camera={new PerspectiveCamera(50, aspect, 180, 1800)}>
+      <WebGLRendererConfig />
+      <ambientLight color={globeConfig.ambientLight} intensity={0.6} />
+      <directionalLight
+        color={globeConfig.directionalLeftLight}
+        position={new Vector3(-400, 100, 400)}
       />
-    </div>
-  )
+      <directionalLight
+        color={globeConfig.directionalTopLight}
+        position={new Vector3(-200, 500, 200)}
+      />
+      <pointLight
+        color={globeConfig.pointLight}
+        position={new Vector3(-200, 500, 200)}
+        intensity={0.8}
+      />
+      <Globe {...props} />
+      <OrbitControls
+        enablePan={false}
+        enableZoom={false}
+        minDistance={cameraZ}
+        maxDistance={cameraZ}
+        autoRotateSpeed={1}
+        autoRotate={true}
+        minPolarAngle={Math.PI / 3.5}
+        maxPolarAngle={Math.PI - Math.PI / 3}
+      />
+    </Canvas>
+  );
+}
+
+export function hexToRgb(hex: string) {
+  var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+  hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+    return r + r + g + g + b + b;
+  });
+
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16),
+      }
+    : null;
+}
+
+export function genRandomNumbers(min: number, max: number, count: number) {
+  const arr = [];
+  while (arr.length < count) {
+    const r = Math.floor(Math.random() * (max - min)) + min;
+    if (arr.indexOf(r) === -1) arr.push(r);
+  }
+
+  return arr;
 }
