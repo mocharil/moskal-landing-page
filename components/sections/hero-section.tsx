@@ -1,4 +1,5 @@
 "use client"
+import React from "react"
 import { ArrowRight } from "lucide-react"
 import { motion } from "framer-motion"
 import dynamic from "next/dynamic"
@@ -62,18 +63,20 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="mb-6"
           >
-            <WordRotate
-              words={[
-                "AI that helps you track public sentiment",
-                "AI that helps you track what people say",
-                "AI that helps you track market trends",
-                "AI that helps you track brand presence",
-                "AI that helps you track audience engagement",
-                "AI that helps you track online conversations",
-                "AI that helps you track emerging narratives",
-              ]}
-              className="text-4xl sm:text-5xl md:text-7xl font-bold text-gradient-blue leading-tight"
-            />
+            <div className="text-4xl sm:text-5xl md:text-7xl font-bold text-gradient-blue leading-tight">
+              <span>AI that helps you track </span>
+              <WordRotate
+                words={[
+                  "public sentiment",
+                  "what people say",
+                  "market trends",
+                  "brand presence",
+                  "audience engagement",
+                  "online conversations",
+                  "emerging narratives",
+                ]}
+              />
+            </div>
             <div className="text-4xl sm:text-5xl md:text-7xl font-bold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 bg-clip-text text-transparent leading-tight mt-2">
               in real time before it hits the headlines
             </div>
